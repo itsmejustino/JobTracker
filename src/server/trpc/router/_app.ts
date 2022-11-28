@@ -1,9 +1,7 @@
 import { router } from "../trpc";
-import { exampleRouter } from "./example";
 import { jobRouter } from "./jobrouter";
 
 export const appRouter = router({
-  example: exampleRouter,
   jobs: jobRouter,
 });
 
