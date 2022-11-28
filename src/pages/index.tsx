@@ -1,7 +1,16 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+
+  const jobMutation = trpc.jobs.useMutation();
+
+  const newJob = async () => {
+    const name = 'random job'
+    
+    jobMutation.mutate({name});
+  }
 
   return (
     <>
@@ -50,6 +59,7 @@ const Home: NextPage = () => {
         </div>
 
       </div>
+  
     </main>
     </>
   );
