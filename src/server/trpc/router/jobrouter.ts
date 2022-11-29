@@ -5,6 +5,17 @@ import { router, publicProcedure } from "../trpc";
 
 export const jobRouter = router({
 
+    jobs: publicProcedure.input(
+        z.object({
+            name: z.string().nullish(),
+            company: z.string().nullish(),
+            platform: z.string().nullish(),
+            aplliedon: z.string().nullish(),
+        }).nullish(),
+    ).query(({ input }) => {
+        return input;
+      }),
+
     // The syntax is identical to creating queries
     addJob: publicProcedure
         // using zod schema to validate and infer input values
@@ -19,20 +30,14 @@ export const jobRouter = router({
         .mutation(({ input }) => {
             // Here return the information from the addJob procedure
             return {
-                addJob:{
+                addJob: {
                     name: input.name,
                     company: input.company,
                     platform: input.platform,
                     aplliedon: input.appliedon,
                 },
             };
-        })
+        }),
+
 });
 
-    // getall: publicProcedure.query(() => {
-    //     return ctx.task.findMany({
-    //       orderBy: {
-    //         createdAt: 'asc',
-    //       },
-    //     });
-    //   }),
