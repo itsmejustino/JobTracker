@@ -3,14 +3,24 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+  const createJobMutation = trpc.jobs.addJob.useMutation();
+  // const queryJobs= trpc.jobs.queryJobs.useQuery();
 
-  const jobMutation = trpc.jobs.useMutation();
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    console.log(event.target.jobName.value);
+    console.log(event.currentTarget);
+  };
 
-  const newJob = async () => {
-    const name = 'random job'
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>)=> {
+    const newValue = e.target.value;
+    console.log(newValue);
+ }
+
+  // const newJob = async () => {
+  //   const name = 'random job'
     
-    jobMutation.mutate({name});
-  }
+  //   jobMutation.mutate({name});
+  // }
 
   return (
     <>
@@ -30,36 +40,41 @@ const Home: NextPage = () => {
         </button>
         </div>
       </div>
-      <div className="flex flex-wrap flex-row gap-4 mt-20 justify-center items-end ">
+      <div className="flex flex-wrap flex-row gap-4 mt-20 justify-center items-end " onChange={onChange}>
         <div className="flex flex-col gap-0">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Name</label>
-          <input type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          <input name='jobName'  value={createJobMutation.variables?.name}type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
 
         <div className="flex flex-col gap-0">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Organization</label>
-          <input type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          <input value={createJobMutation.variables?.company}type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
 
         <div className="flex flex-col gap-0">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Platform</label>
-          <input type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          <input value={createJobMutation.variables?.platform} type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
+        
 
         <div className="flex flex-col gap-0">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Applied On-Date</label>
-          <input type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          <input value={createJobMutation.variables?.appliedon} type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
+
+
         <div className="">
-        <button type='button' className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500">Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <button 
+        // onClick={handleClick} 
+        type='button' className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           
         </button>
         </div>
 
+
       </div>
-  
     </main>
     </>
   );
