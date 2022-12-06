@@ -11,7 +11,7 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   // Mutations and Queries for jobs to the DB
   const createJobMutation = trpc.jobs.addJob.useMutation();
-  // const queryJobs= trpc.jobs.queryJobs.useQuery();
+  const queryJobs= trpc.jobs.queryJobs.useQuery();
 
   //useState to capture changes to input fields
   const [jobText, setJobText] = useState('');
@@ -32,9 +32,21 @@ const Home: NextPage = () => {
   //     console.log(newValue, targetName);
   //  }
 
-  const newJob = (e: React.MouseEvent<HTMLInputElement>) => {
-    const newValue = {};
+  // const newJob = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const newValue = {};
 
+  // }
+  
+  const createJob = (name: string, company: string, platform: string, appliedon: string) => {
+    createJobMutation.mutate({
+      name,
+      company,
+      platform,
+      appliedon,
+    });
+  }
+  const queryAllJobs = ()=> {
+   return queryJobs.data
   }
 
   return (
@@ -125,14 +137,16 @@ const Home: NextPage = () => {
 
           <div className="">
             <button
-              onClick={(e) => {
+              onClick={() => {
                 const input = {
-                  appliedOnText,
+                  name: appliedOnText,
                   platformText,
                   orgText,
                   jobText,
               }
-                console.log(input);
+              console.log(input);
+              createJob(jobText, orgText, platformText, appliedOnText)
+              console.log(queryAllJobs());
               }}
               type='button' className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

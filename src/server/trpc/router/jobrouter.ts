@@ -8,7 +8,7 @@ export const jobRouter = router({
 
     queryJobs: publicProcedure.query(async ({ ctx })=>{
         const jobApps = await ctx.prisma.job.findMany();
-        return jobApps 
+        return jobApps; 
     }),
 
     // The syntax is identical to creating queries
