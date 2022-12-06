@@ -6,17 +6,10 @@ import { router, publicProcedure } from "../trpc";
 
 export const jobRouter = router({
 
-    queryJobs: publicProcedure.input(
-        z.object({
-            name: z.string().nullish(),
-            company: z.string().nullish(),
-            platform: z.string().nullish(),
-            aplliedon: z.string().nullish(),
-        }).nullish(),
-    ).query(({ input }) => {
-        console.log('input received'+ input)
-        return input;
-      }),
+    queryJobs: publicProcedure.query(async ({ ctx })=>{
+        const jobApps = await ctx.prisma.job.findMany();
+        return jobApps 
+    }),
 
     // The syntax is identical to creating queries
     addJob: publicProcedure
@@ -60,3 +53,15 @@ export const jobRouter = router({
 //     })
 //     return jobCreation;
 // })
+
+// .input(
+//     z.object({
+//         name: z.string().nullish(),
+//         company: z.string().nullish(),
+//         platform: z.string().nullish(),
+//         aplliedon: z.string().nullish(),
+//     }).nullish(),
+// ).query(async ({ ctx }) => {
+//     console.log('input received'+ input)
+//     return input;
+//   })
