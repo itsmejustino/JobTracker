@@ -37,9 +37,9 @@ const Home: NextPage = () => {
 
   // }
   
-  const createJob = (name: string, company: string, platform: string, appliedon: string) => {
+  const createJob = (jobName: string, company: string, platform:string, appliedon: string) => {
     createJobMutation.mutate({
-      name,
+      jobName,
       company,
       platform,
       appliedon,
@@ -139,7 +139,7 @@ const Home: NextPage = () => {
             <button
               onClick={() => {
                 const input = {
-                  name: appliedOnText,
+                  appliedOnText,
                   platformText,
                   orgText,
                   jobText,

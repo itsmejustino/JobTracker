@@ -1,39 +1,40 @@
-import { createTRPCNext } from "@trpc/next";
+import { createRouter } from "@trpc/next";
 import { z } from "zod";
 
 import { router, publicProcedure } from "../trpc";
 
 
 export const jobRouter = router({
-
-    queryJobs: publicProcedure.query(async ({ ctx })=>{
-        const jobApps = await ctx.prisma.job.findMany();
-        return jobApps; 
-    }),
-
     // The syntax is identical to creating queries
     addJob: publicProcedure
-    .input(
-        z.object({
-            name: z.string(),
-            company: z.string(),
-            platform: z.string(),
-            appliedon: z.string(),
-        })
-    )
-    .mutation(({ input }) => {
-        // Here return the information from the addJob procedure
-        return {
-            addJob: {
-                name: input.name,
-                company: input.company,
-                platform: input.platform,
-                aplliedon: input.appliedon,
-            },
-        };
+        .input(
+            z.object({
+                jobName: z.string(),
+                company: z.string(),
+                platform: z.string(),
+                appliedon: z.string(),
+            })
+        )
+        .mutation(({ ctx, input }) => {
+            const { prisma } = ctx;
+            const { jobName, company, platform, appliedon } = input;
+            return prisma.job.create({
+                data: {
+                    jobName,
+                    company,
+                    platform,
+                    appliedon,
+                }
+            });
+            // Here return the information from the addJob procedure
+            
+        }),
+    queryJobs: publicProcedure.query(async ({ ctx }) => {
+        const jobApps = await ctx.prisma.job.findMany();
+        return jobApps;
     }),
-        // using zod schema to validate and infer input values
-      
+    // using zod schema to validate and infer input values
+
 
 });
 
@@ -44,10 +45,10 @@ export const jobRouter = router({
 //     const jobCreation = await ctx.prisma.job.create({
 //         data:{
 
-//     // name: z.string(),
-//     // company: z.string(),
-//     // platform: z.string(),
-//     // appliedon: z.string(),
+    // name: z.string(),
+    // company: z.string(),
+    // platform: z.string(),
+    // appliedon: z.string(),
 
 //         },
 //     })
