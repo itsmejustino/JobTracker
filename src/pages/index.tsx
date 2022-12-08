@@ -1,17 +1,20 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { EventHandler, useState } from "react";
+import { render } from "react-dom";
 import { trpc } from "../utils/trpc";
+import jobs from "./api/jobs";
 
 //1. Capture input in State object. [DONE]
-//2. Use object in State to Mutate to database. [In progress]
-//3. query database for newly posted input. [Not Started]
-//4. Map db to create a list of input. [Not Started]
+//2. Use object in State to Mutate to database. [DONE]
+//3. query database for newly posted input. [DONE]
+//4. Map db to create a list of input. [In Progress]
 
 const Home: NextPage = () => {
   // Mutations and Queries for jobs to the DB
   const createJobMutation = trpc.jobs.addJob.useMutation();
-  const queryJobs= trpc.jobs.queryJobs.useQuery();
+  const queryJobs = trpc.jobs.queryJobs.useQuery();
+  const deleteJob = trpc.jobs.deleteJob.useMutation();
 
   //useState to capture changes to input fields
   const [jobText, setJobText] = useState('');
@@ -20,24 +23,7 @@ const Home: NextPage = () => {
   const [appliedOnText, setAppliedOnText] = useState('');
   const [id, setId] = useState('');
 
-  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-  //   console.log(event.target);
-  //   console.log(event.currentTarget);
-  //   return createJobMutation;
-  // };
-
-  //   const onChange = (e: React.FormEventHandler<HTMLInputElement>)=> {
-  //     const newValue = e.name.length
-  //     const targetName = e.target.name
-  //     console.log(newValue, targetName);
-  //  }
-
-  // const newJob = (e: React.MouseEvent<HTMLInputElement>) => {
-  //   const newValue = {};
-
-  // }
-  
-  const createJob = (jobName: string, company: string, platform:string, appliedon: string) => {
+  const createJob = (jobName: string, company: string, platform: string, appliedon: string) => {
     createJobMutation.mutate({
       jobName,
       company,
@@ -45,8 +31,32 @@ const Home: NextPage = () => {
       appliedon,
     });
   }
-  const queryAllJobs = ()=> {
-   return queryJobs.data
+
+  const deleteAllJobs = () => {
+    deleteJob.mutate();
+  }
+
+  const queryAllJobs = () => {
+
+    console.log(queryJobs.data?.map((x => ' Job Name: ' + x.jobName)));
+    return (
+      <div>
+        <div className="gap-2 justify-center flex-col row-span-2">
+          {JSON.stringify(queryJobs.data?.map(x => x))}
+        </div>
+      </div>
+
+    )
+  }
+
+  const getInput = (event: React.FormEvent) => {
+    event.preventDefault();
+    // console.log(e.target.jobName.value)
+    const jobText = event.target.jobName.value
+    const orgText = event.target.organization.value
+    const platformText = event.target.platform.value
+    const appliedOnText = event.target.appliedOn.value
+    createJob(jobText, orgText, platformText, appliedOnText)
   }
 
   return (
@@ -67,18 +77,12 @@ const Home: NextPage = () => {
             </button>
           </div>
         </div>
-        <form className="flex flex-wrap flex-row gap-4 mt-20 justify-center items-end">
+        <form className="flex flex-wrap flex-row gap-4 mt-20 justify-center items-end" onSubmit={getInput}>
           <div className="flex flex-col gap-0">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Name</label>
-            <input name='jobName'
+            <input
+              name='jobName'
               key={id}
-              value={jobText}
-              onChange={(e) => {
-                e.preventDefault();
-                setJobText(e.target.value);
-                setId(e.target.name)
-                console.log(jobText, id);
-              }}
               type="text" id="small-input" className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
           </div>
 
@@ -87,13 +91,7 @@ const Home: NextPage = () => {
             <input
               name='organization'
               key={id}
-              value={orgText}
-              onChange={(e) => {
-                e.preventDefault();
-                setOrgText(e.target.value);
-                setId(e.target.name)
-                console.log(orgText, id);
-              }}
+          
               type="text"
               id="small-input"
               className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -104,13 +102,6 @@ const Home: NextPage = () => {
             <input
               name='platform'
               key={id}
-              value={platformText}
-              onChange={(e) => {
-                e.preventDefault();
-                setPlatformText(e.target.value);
-                setId(e.target.name)
-                console.log(platformText, id);
-              }}
               type="text"
               id="small-input"
               className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -122,13 +113,7 @@ const Home: NextPage = () => {
             <input
               name='appliedOn'
               key={id}
-              value={appliedOnText}
-              onChange={(e) => {
-                e.preventDefault();
-                setAppliedOnText(e.target.value);
-                setId(e.target.name)
-                console.log(appliedOnText, id);
-              }}
+
               type="text"
               id="small-input"
               className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -137,27 +122,63 @@ const Home: NextPage = () => {
 
           <div className="">
             <button
-              onClick={() => {
-                const input = {
-                  appliedOnText,
-                  platformText,
-                  orgText,
-                  jobText,
-              }
-              console.log(input);
-              createJob(jobText, orgText, platformText, appliedOnText)
-              console.log(queryAllJobs());
-              }}
-              type='button' className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              type='submit' className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
 
             </button>
           </div>
-
-
         </form>
+
+        <div className="mt-3 ">
+
+          <button
+            onClick={() => {
+              queryAllJobs()
+              console.log(queryAllJobs());
+            }}
+            type='button'
+            className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
+          >
+            Refresh Job List
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+          </button>
+
+
+
+
+        </div>
+        <div>
+          <button
+            className="m-2"
+            onClick={() => {
+              deleteAllJobs()
+              console.log(queryAllJobs());
+            }}
+            type='button'
+            className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
+          >
+            Delete Job List
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+            </svg>
+
+
+
+          </button>
+        </div>
+
       </main>
+
+      <div>
+        
+        {
+          queryAllJobs()
+        }
+      </div>
+
     </>
   );
 };
