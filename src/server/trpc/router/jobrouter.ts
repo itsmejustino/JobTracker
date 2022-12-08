@@ -1,6 +1,4 @@
-import { createRouter } from "@trpc/next";
 import { z } from "zod";
-
 import { router, publicProcedure } from "../trpc";
 
 
@@ -26,9 +24,17 @@ export const jobRouter = router({
                     appliedon,
                 }
             });
+
             // Here return the information from the addJob procedure
-            
+
         }),
+    deleteJob: publicProcedure
+        .mutation(({ ctx }) => {
+            const { prisma } = ctx;
+            return prisma.job.deleteMany({});
+        }),
+    // Here return the information from the addJob procedure
+
     queryJobs: publicProcedure.query(async ({ ctx }) => {
         const jobApps = await ctx.prisma.job.findMany();
         return jobApps;
@@ -37,32 +43,3 @@ export const jobRouter = router({
 
 
 });
-
-
-
-
-// .mutation(async ({ ctx }) => {
-//     const jobCreation = await ctx.prisma.job.create({
-//         data:{
-
-    // name: z.string(),
-    // company: z.string(),
-    // platform: z.string(),
-    // appliedon: z.string(),
-
-//         },
-//     })
-//     return jobCreation;
-// })
-
-// .input(
-//     z.object({
-//         name: z.string().nullish(),
-//         company: z.string().nullish(),
-//         platform: z.string().nullish(),
-//         aplliedon: z.string().nullish(),
-//     }).nullish(),
-// ).query(async ({ ctx }) => {
-//     console.log('input received'+ input)
-//     return input;
-//   })
