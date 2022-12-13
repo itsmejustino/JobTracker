@@ -28,10 +28,19 @@ export const jobRouter = router({
             // Here return the information from the addJob procedure
 
         }),
-    deleteJob: publicProcedure
-        .mutation(({ ctx }) => {
+    deleteJob: publicProcedure.input(
+        z.object({
+            id: z.string(),
+        })
+    )
+        .mutation(({ ctx , input }) => {
             const { prisma } = ctx;
-            return prisma.job.deleteMany({});
+            const { id } = input;
+            return prisma.job.delete({
+                    where:{
+                        id,
+                    }
+            });
         }),
     // Here return the information from the addJob procedure
 
