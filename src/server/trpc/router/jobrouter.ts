@@ -42,13 +42,18 @@ export const jobRouter = router({
                     }
             });
         }),
-    // Here return the information from the addJob procedure
+     getAllJobs: publicProcedure
+    .query(({ ctx }) => {
+       
+            return ctx.prisma.job.findMany();
+            
+      }),
 
-    queryJobs: publicProcedure.query(async ({ ctx }) => {
-        const jobApps = await ctx.prisma.job.findMany();
-        return jobApps;
-    }),
-    // using zod schema to validate and infer input values
-
-
+    getSpecificJobs: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+        return ctx.prisma.job.findFirst({
+          where: {
+            id: input,
+          },
+        });
+      }),
 });
