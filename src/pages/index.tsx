@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { trpc } from "../utils/trpc";
 import { Job } from '@prisma/client'
 import JobList from "./components/Joblist";
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
   const createJobMutation = trpc.jobs.addJob.useMutation();
   const queryJobs = trpc.jobs.getAllJobs.useQuery();
-  
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
   
   
   // const querySomeJobs = trpc.jobs.getSpecificJobs.useQuery({ id, jobName, company, platform, appliedon })
@@ -101,6 +101,7 @@ const Home: NextPage = () => {
 
             <button
               type='submit'
+              onClick={forceUpdate}
               className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>

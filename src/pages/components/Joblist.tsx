@@ -1,6 +1,10 @@
 import React, { type FC } from 'react';
 import { useRouter } from "next/router";
+import  useEffect  from "next/router";
+import useState  from "next/router";
+import { useReducer } from 'react';
 import { trpc } from "../../utils/trpc";
+import { any } from 'zod';
 interface JobListProps {
   id: string;
   jobName: string;
@@ -10,13 +14,13 @@ interface JobListProps {
 }
 
 const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }) => {
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
   const deleteJobMutation = trpc.jobs.deleteJob.useMutation().mutateAsync;
   const queryJobList = trpc.jobs.getAllJobs.useQuery();
 
-  const displayJobs = queryJobList.data?.map(x => {
-
+  const displayJobs =  queryJobList.data?.map(x => {
     return (
-      <div key={x.id} id={x.id} className="flex flex-row items-center gap-2 justify-center mb-2">
+      <div onChange={forceUpdate} key={x.id} id={x.id} className="flex flex-row items-center gap-2 justify-center mb-2">
         <ul className="flex flex-row items-center gap-2">
           <li>Job: {x.jobName}</li>
           <li>Company: {x.company}</li>
@@ -27,9 +31,10 @@ const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }
         
           onClick={() => {
             // e.target.dispatchEvent
-          
-            const deleteKey: any = document.getElementById(`${x.id}`)?.id
-            deleteJobMutation({id: deleteKey})
+            
+            const deleteKey:any= document.getElementById(`${x.id}`)?.id;
+            deleteJobMutation({id: deleteKey});
+            // forceUpdate;
           }}
           type='button'
           className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
@@ -44,16 +49,13 @@ const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }
       </div>)
 
   })
-  console.log(displayJobs)
+
+
 
   return (
-    <div>
-
+    <ul>
       {displayJobs}
-
-
-
-    </div>
+    </ul>
   );
 };
 
