@@ -17,12 +17,10 @@ const Home: NextPage = () => {
 
   const createJobMutation = trpc.jobs.addJob.useMutation();
   const queryJobs = trpc.jobs.getAllJobs.useQuery();
-  const deleteJobMutation = trpc.jobs.deleteJob.useMutation().mutateAsync;
+  
+  
+  
   // const querySomeJobs = trpc.jobs.getSpecificJobs.useQuery({ id, jobName, company, platform, appliedon })
-
-
-
-
   // if(!jobsData || isLoading) return <p> loading...</p>
 
   const createJob = (jobName: string, company: string, platform: string, appliedon: string) => {
@@ -34,37 +32,8 @@ const Home: NextPage = () => {
     });
   }
 
-  // const deleteThisJob = (id: string) => {
-  //   deleteJobMutation.mutate(
-  //     id,
-  //   );
-  // }
-
-  const queryAllJobs = () => {
-    queryJobs.data?.map(x => x.id)
-    return (
-      <div >
-        <div className="gap-2 justify-center flex-col row-span-2">
-          {JSON.stringify(queryJobs.data?.forEach(x => x.id))}
 
 
-          <button
-            onClick={() => {
-              deleteJobMutation({ id: 'clbluytv20000wd5o2olvaycz' });
-              console.log(queryJobs.data?.map(x => x.id));
-            }}
-            type='button'
-            className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
-          >
-            Delete This Job
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   const getInput = (event: React.FormEvent) => {
     event.preventDefault();
@@ -130,39 +99,15 @@ const Home: NextPage = () => {
               className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
           </div>
 
-
-          <div className="">
             <button
               type='submit'
               className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-
             </button>
-          </div>
         </form>
 
-        <div className="mt-3 ">
-
-          <button
-            onClick={() => {
-              queryAllJobs()
-            }}
-            type='button'
-            className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
-          >
-            Refresh Job List
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-          </button>
-
-
-
-
-        </div>
-
-
+       
       </main>
 
       {

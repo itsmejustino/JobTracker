@@ -12,13 +12,11 @@ interface JobListProps {
 const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }) => {
   const deleteJobMutation = trpc.jobs.deleteJob.useMutation().mutateAsync;
   const queryJobList = trpc.jobs.getAllJobs.useQuery();
-  const jobsArray = queryJobList.data
-  console.log('JobList ConsoleL:' + queryJobList.data);
 
   const displayJobs = queryJobList.data?.map(x => {
 
     return (
-      <div key={x.id} className="flex flex-row items-center gap-2 justify-center mb-2">
+      <div key={x.id} id={x.id} className="flex flex-row items-center gap-2 justify-center mb-2">
         <ul className="flex flex-row items-center gap-2">
           <li>Job: {x.jobName}</li>
           <li>Company: {x.company}</li>
@@ -26,13 +24,16 @@ const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }
           <li>Applied Date: {x.appliedon}</li>
         </ul>
         <button
+        
           onClick={() => {
-            deleteJobMutation({ id })
-            console.log('clicked delete joblist')
+            // e.target.dispatchEvent
+          
+            const deleteKey: any = document.getElementById(`${x.id}`)?.id
+            deleteJobMutation({id: deleteKey})
           }}
           type='button'
           className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500"
-
+          key={x.id}
         >
           Delete
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
