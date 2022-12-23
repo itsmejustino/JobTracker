@@ -5,15 +5,15 @@ import useState  from "next/router";
 import { useReducer } from 'react';
 import { trpc } from "../../utils/trpc";
 import { any } from 'zod';
-interface JobListProps {
-  id: string;
-  jobName: string;
-  company: string;
-  platform: string;
-  appliedon: string;
-}
+// interface JobListProps {
+//   id: string;
+//   jobName: string;
+//   company: string;
+//   platform: string;
+//   appliedon: string;
+// }
 
-const JobList: FC<JobListProps> = ({ id, jobName, company, platform, appliedon }) => {
+const JobList: FC = () => {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   const deleteJobMutation = trpc.jobs.deleteJob.useMutation().mutateAsync;
   const queryJobList = trpc.jobs.getAllJobs.useQuery();

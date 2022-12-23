@@ -33,27 +33,29 @@ export const jobRouter = router({
             id: z.string(),
         })
     )
-        .mutation(({ ctx , input }) => {
+        .mutation(({ ctx, input }) => {
             const { prisma } = ctx;
             const { id } = input;
             return prisma.job.delete({
-                    where:{
-                        id,
-                    }
+                where: {
+                    id,
+                }
             });
         }),
-     getAllJobs: publicProcedure
-    .query(({ ctx }) => {
-       
+    getAllJobs: publicProcedure
+        .query(({ ctx }) => {
             return ctx.prisma.job.findMany();
-            
-      }),
+        }),
 
-    getSpecificJobs: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-        return ctx.prisma.job.findFirst({
-          where: {
-            id: input,
-          },
-        });
-      }),
+    getSpecificJobs: publicProcedure.input(
+        z.string()).query(({
+            ctx,
+            input }) => {
+
+            return ctx.prisma.job.findFirst({
+                where: {
+                    id: input,
+                },
+            });
+        }),
 });

@@ -11,15 +11,13 @@ import JobList from "./components/Joblist";
 //4. Map db to create a list of input. [In Progress]
 
 const Home: NextPage = () => {
-  //useState to capture changes to input fields
-  // const [jobs, setJobs] = useState<Job[]>([]);
-  // Mutations and Queries for jobs to the DB
 
+  // Mutations and Queries for jobs to the DB
   const createJobMutation = trpc.jobs.addJob.useMutation();
   const queryJobs = trpc.jobs.getAllJobs.useQuery();
   const [, forceUpdate] = useReducer(x => x + 1, 0);
-  
-  
+
+  //loading component using isLoading attribute from from trpc 
   // const querySomeJobs = trpc.jobs.getSpecificJobs.useQuery({ id, jobName, company, platform, appliedon })
   // if(!jobsData || isLoading) return <p> loading...</p>
 
@@ -31,9 +29,6 @@ const Home: NextPage = () => {
       appliedon,
     });
   }
-
-
-
 
   const getInput = (event: React.FormEvent) => {
     event.preventDefault();
@@ -99,16 +94,14 @@ const Home: NextPage = () => {
               className="block w-100 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
           </div>
 
-            <button
-              type='submit'
-              onClick={forceUpdate}
-              className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <button
+            type='submit'
+            onClick={forceUpdate}
+            className="flex flex-row items-center gap-2 bg-blue-400 text-sm rounded-md transition p-2 hover:bg-blue-500" >Add Job <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </button>
+            </svg>
+          </button>
         </form>
-
-       
       </main>
 
       {
@@ -118,7 +111,8 @@ const Home: NextPage = () => {
           platform={JSON.stringify(queryJobs.data?.map(x => x.platform))}
           appliedon={JSON.stringify(queryJobs.data?.map(x => x.appliedon))}
           id={JSON.stringify(queryJobs.data?.map(x => x.id))}
-        />}
+        />
+      }
 
     </>
   );
