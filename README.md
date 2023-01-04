@@ -7,6 +7,15 @@ This is a simple job tracking application written with the T-3 Stack. This code 
 If you would like to try out the simplist form of this application you can fork this repository and follow the steps for setting up the T-3 Stack below. 
 
 ## Contact
+Want to contact me for more questions regarding this porject? Feel free to reach out to me or create a Pull Request to edit this current project with the info below.
+
+Github Username:
+https://github.com/itsmejustino
+
+or
+
+Email me at:
+justindortiz@me.com
 
 ## Create T3 App
 
