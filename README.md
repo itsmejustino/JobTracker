@@ -1,4 +1,14 @@
-# Create T3 App
+# Job Tracker App
+
+This is a simple job tracking application written with the T-3 Stack. This code base has the simple functions for the CRUD functions that will be used within the Job Tracker App and its main purpose was for testing. Please take a look at Job Tracker V2 for the full stack application. 
+
+## Use
+
+If you would like to try out the simplist form of this application you can fork this repository and follow the steps for setting up the T-3 Stack below. 
+
+## Contact
+
+## Create T3 App
 
 This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
 
